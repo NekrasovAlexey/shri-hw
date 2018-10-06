@@ -1,0 +1,274 @@
+body {
+    font-family: ArialMT;
+    color: #333;
+}
+
+.icon {
+    width: 52px;
+    height: 52px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.icon_stats {
+    background-image: url('assets/stats.svg');
+}
+
+.icon_key {
+    background-image: url('assets/key.svg');
+}
+
+.icon_robot-cleaner {
+    background-image: url('assets/robot-cleaner.svg');
+}
+
+.icon_router {
+    background-image: url('assets/router.svg');
+}
+
+.icon_thermal {
+    background-image: url('assets/thermal.svg');
+}
+
+.icon_ac {
+    background-image: url('assets/air-conditioner.svg');
+}
+
+.icon_music {
+    background-image: url('assets/music.svg');
+}
+
+.icon_fridge {
+    background-image: url('assets/fridge.svg');
+}
+
+.icon_battery {
+    background-image: url('assets/battery.svg');
+}
+
+.icon_cam {
+    background-image: url('assets/cam-white.svg');
+}
+
+.icon_kettle {
+    background-image: url('assets/kettle.svg');
+}
+
+.header {
+    padding: 34px 42px;
+    border-bottom: #F0F0F0;
+}
+
+.header__logo {
+    display: inline-block;
+    width: 108px;
+    margin-right: 10px;
+}
+
+.header__menu {
+    display: inline-block;
+}
+
+.menu__item {
+    margin: 0 10px;
+    display: inline-block;
+    font-family: Arial-BoldMT;
+    font-size: 16px;
+}
+
+.menu__link {
+    text-decoration: none;
+    color: #333;
+    opacity: .6;
+}
+
+.menu__link_active {
+    opacity: 1;
+}
+
+.main {
+    padding: 0 170px 80px 170px;
+}
+
+.main__title {
+    font-size: 36px;
+    font-family: Arial-BoldMT;
+    padding: 32px 0;
+}
+
+.events {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(auto-fill, minmax(130px, max-content));
+    grid-gap: 20px;
+    grid-auto-flow: dense;
+}
+
+.event {
+    padding: 20px;
+    background: #FAFAFA;
+    border-radius: 20px;
+}
+
+.event:hover {
+    background: #F3F3F3;
+    box-shadow: 0 2px 6px 0 rgba(197, 186, 186, .50);
+}
+
+.event_l {
+    grid-column: auto / span 4;
+}
+
+.event_m {
+    grid-column: auto / span 3;
+}
+
+.event_s {
+    grid-column: auto / span 2;
+}
+
+.event_m-row {
+    grid-row: auto / span 2;
+}
+
+.event_l-row {
+    grid-row: auto / span 3;
+}
+
+.event__header {
+    display: grid;
+    grid-template-columns: 52px 1fr 1fr;
+    grid-template-rows: auto;
+    grid-template-areas:
+        "icon title title"
+        "source source time";
+    font-size: 24px;
+    font-family: Arial-BoldMT;
+    grid-gap: 18px;
+}
+
+.event_critical .event__header {
+    background: #DB5341;
+    margin: -20px;
+    padding: 20px 20px 40px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    color: #fff;
+}
+
+.event_critical:hover .event__header {
+    background: #c35240;
+}
+
+.event_s .event__header {
+    grid-template-areas:
+        "icon title title"
+        "source source source"
+        "time time time";
+}
+
+.event__icon {
+    grid-area: icon;
+    display: inline-block;
+    margin-right: 16px;
+}
+
+.event__title {
+    grid-area: title;
+    display: inline-block;
+    align-self: center;
+}
+
+.event__source {
+    grid-area: source;
+    font-size: 18px;
+    font-family: ArialMT;
+}
+
+.event__time {
+    grid-area: time;
+    font-size: 18px;
+    font-family: ArialMT;
+    text-align: right;
+}
+
+.event_s .event__time {
+    text-align: left;
+}
+
+.event__info {
+    margin-top: 20px;
+}
+
+.event_critical .event__info {
+    margin-top: 0;
+}
+
+.event__description {
+    font-size: 20px;
+    margin: -20px;
+    padding: 20px;
+    border-radius: 20px;
+}
+
+.event_l .event__description {
+    font-size: 24px;
+}
+
+.event_critical .event__description {
+    background: #FAFAFA;
+}
+
+.event_critical:hover .event__description {
+    background: #F3F3F3;
+}
+
+.event__image {
+    width: 100%;
+}
+
+.event__climate {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    color: #000;
+}
+
+.climate__value {
+    font-family: Arial-BoldMT;
+}
+
+.button {
+    padding: 16px 48px;
+    background: #E5E5E5;
+    border-radius: 8px;
+    font-family: Arial-BoldMT;
+    font-size: 20px;
+    color: #000;
+    border: none;
+    outline: none;
+}
+
+.button:hover {
+    background: #dbdbdb;
+}
+
+.button:active {
+    background: #d1d1d1;
+}
+
+.button:not(:first-of-type) {
+    margin-left: 18px;
+}
+
+.button_apply {
+    background: #FFD93E;
+}
+
+.button_apply:hover {
+    background: #f5d03c;
+}
+
+.button_apply:active {
+    background: #ebc83a;
+}

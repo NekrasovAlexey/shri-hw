@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex">
+
+    <link rel="stylesheet" href="index.css">
+
+    <title>События - Умный дом</title>
+</head>
+<body>
+    <header class="header">
+        <div class="header__logo">
+            <img src="assets/logo.svg">
+        </div>
+        <div class="header__menu">
+            <div class="menu__item menu__item_active">
+                <a href="#" class="menu__link">События</a>
+            </div>
+            <div class="menu__item">
+                <a href="#" class="menu__link">Сводка</a>
+            </div>
+            <div class="menu__item">
+                <a href="#" class="menu__link">Устройства</a>
+            </div>
+            <div class="menu__item">
+                <a href="#" class="menu__link">Сценарии</a>
+            </div>
+        </div>
+    </header>
+    <main class="main">
+        <header class="main__title">
+            Лента событий
+        </header>
+        <div class="events">
+
+        </div>
+    </main>
+
+    <template id="event">
+        <div class="event">
+            <div class="event__header">
+                <div class="event__icon icon"></div>
+                <div class="event__title"></div>
+                <!--<div class="event__subtitle">-->
+                    <div class="event__source"></div>
+                    <div class="event__time"></div>
+                <!--</div>-->
+            </div>
+            <div class="event__info">
+                <div class="event__description"></div>
+                <div class="event__data"></div>
+            </div>
+        </div>
+    </template>
+
+    <template id="graph">
+        <div class="event__graph">
+            <img src="" class="graph__img event__image"/>
+        </div>
+    </template>
+
+    <template id="climate">
+        <div class="event__climate">
+            <div class="climate__temperature">
+                Температура
+                <span class="climate__value"></span>
+            </div>
+            <div class="climate__humidity">
+                Влажность
+                <span class="climate__value"></span>
+            </div>
+        </div>
+    </template>
+
+    <template id="button-template">
+        <button class="button"></button>
+    </template>
+</body>
+<script src="index.js"></script>
+</html>
