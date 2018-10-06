@@ -143,7 +143,7 @@ const events = {
             "description": "Робопылесос не смог сменить свое местоположение в течение последних 3 минут. Похоже, ему нужна помощь.",
             "icon": "cam",
             "data": {
-                "image": "get_it_from_mocks_:3.jpg"
+                "image": "get_it_from_mocks.jpg"
             },
             "size": "l"
         },
@@ -165,6 +165,7 @@ const template = document.querySelector('#event');
 const graphTemplate = document.querySelector('#graph');
 const buttonTemplate = document.querySelector('#button-template');
 const climateTemplate = document.querySelector('#climate');
+const camTemplate = document.querySelector('#cam');
 
 const addGraph = (data, parent) => {
     const graph = graphTemplate.content.cloneNode(true);
@@ -201,15 +202,16 @@ const addClimate = (data, parent) => {
     parent.appendChild(climate);
 };
 
-const addImage = (data, parent) => {
-    const image = document.createElement('img');
+const addCam = (data, parent) => {
+    const cam = camTemplate.content.cloneNode(true);
 
-    image.classList.add('event__image');
+    const image = cam.querySelector('.cam__img');
     image.setAttribute('src', `assets/${data.image}`);
+    image.setAttribute('touch-action', 'none');
 
     parent.parentElement.parentElement.classList.add('event_l-row');
 
-    parent.appendChild(image);
+    parent.appendChild(cam);
 };
 
 const addData = (data, parent) => {
@@ -242,7 +244,7 @@ const addData = (data, parent) => {
             addButtons(data.buttons, parent);
             break;
         case 'image':
-            addImage(data, parent);
+            addCam(data, parent);
             break;
     }
 };
@@ -277,3 +279,144 @@ events.forEach(event => {
 
     eventsContainer.appendChild(eventTemplate);
 });
+
+class CamControl {
+    constructor (query) {
+        this.touch = {};
+        this.params = {
+            translateX: 0,
+            scale: 1,
+            rotate: 0
+        };
+        this.element = document.querySelector(query);
+        this.img = this.element.querySelector('.cam__img');
+
+        this.init();
+        this.updateControls();
+    }
+
+    init () {
+        this.bindEvents();
+    }
+
+    bindEvents () {
+        this.img.addEventListener('pointerdown', e => this.onPointerDown(e));
+        this.img.addEventListener('pointermove', e => this.onPointerMove(e));
+        this.img.addEventListener('pointerup', e => this.onPointerUp(e));
+        this.img.addEventListener('pointercancel', e => this.onPointerUp(e));
+    }
+
+    onPointerDown (e) {
+        this.touch[e.pointerId] = {
+            startX: e.x,
+            startY: e.y,
+            x: e.x,
+            y: e.y
+        };
+    }
+
+    onPointerMove (e) {
+        this.touch[e.pointerId].x = e.x;
+        this.touch[e.pointerId].y = e.y;
+
+        this.detectAction();
+    }
+
+    onPointerUp () {
+        this.touch = {};
+    }
+
+    detectAction () {
+        const ids = Object.keys(this.touch);
+
+        if (ids.length === 1) {
+            const pointerParams = this.touch[ids[0]];
+            const elementWidth = this.img.width;
+            const parentWidth = this.img.parentElement.offsetWidth;
+            const maxTranslate = (elementWidth * this.params.scale - parentWidth) / 2;
+
+            this.params.translateX += pointerParams.x - pointerParams.startX;
+            if (this.params.translateX < -maxTranslate) {
+                this.params.translateX = -maxTranslate;
+            }
+            if (this.params.translateX > maxTranslate) {
+                this.params.translateX = maxTranslate;
+            }
+        }
+
+        if (ids.length === 2) {
+            const firstPointer = this.touch[ids[0]];
+            const secondPointer = this.touch[ids[1]];
+
+            const originalDistance = Math.sqrt(
+                Math.pow(firstPointer.startX - secondPointer.startX, 2) +
+                Math.pow(firstPointer.startY - secondPointer.startY, 2)
+            );
+            const currentDistance = Math.sqrt(
+                Math.pow(firstPointer.x - secondPointer.x, 2) +
+                Math.pow(firstPointer.y - secondPointer.y, 2)
+            );
+
+            const originalDegree = Math.acos(
+                Math.abs(secondPointer.startX - firstPointer.startX) /
+                Math.sqrt(
+                    Math.pow(secondPointer.startX - firstPointer.startX, 2) +
+                    Math.pow(secondPointer.startY - firstPointer.startY, 2)
+                )
+            ) * 180;
+            const currentDegree = Math.acos(
+                Math.abs(secondPointer.x - firstPointer.x) /
+                Math.sqrt(
+                    Math.pow(secondPointer.x - firstPointer.x, 2) +
+                    Math.pow(secondPointer.y - firstPointer.y, 2)
+                )
+            ) * 180;
+
+            this.params.rotate = originalDegree - currentDegree;
+            if (this.params.rotate < 0) {
+                this.params.rotate = 0;
+            }
+            if (this.params.rotate > 90) {
+                this.params.rotate = 90;
+            }
+
+            const translateRate = this.params.translateX / this.params.scale;
+            this.params.scale = currentDistance / originalDistance;
+            if (this.params.scale < 1) {
+                this.params.scale = 1;
+            }
+
+            this.params.translateX = translateRate * this.params.scale;
+        }
+
+        this.updateCam();
+    }
+
+    updateCam () {
+        const {translateX, scale, rotate} = this.params;
+
+        this.img.style.transform = `translateX(${translateX}px) scale(${scale})`;
+        this.img.style.opacity = (90 - rotate) / 90;
+
+        this.updateControls();
+    }
+
+    updateControls () {
+        const {scale, rotate} = this.params;
+        const opacity = (90 - rotate) / 90;
+
+        this.element.querySelector('.cam__scale').querySelector('.cam__control-value').textContent = `${Math.floor(scale * 100)}%`;
+        this.element.querySelector('.cam__bright').querySelector('.cam__control-value').textContent = `${Math.floor(opacity * 100)}%`;
+    }
+}
+
+new CamControl('.event__cam');
+
+// Добавляем работу главного меню.
+const menuToggle = () => {
+    document.querySelector('.header__menu').classList.toggle('menu_hidden');
+    document.querySelector('.paranja').classList.toggle('paranja_hidden');
+};
+
+document.querySelector('.header__mobile-menu').addEventListener('click', menuToggle);
+document.querySelector('.paranja').addEventListener('click', menuToggle);
