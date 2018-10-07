@@ -65,6 +65,24 @@
         </div>
     </template>
 
+    <template id="cam">
+        <div class="event__cam">
+            <div class="cam__image-wrapper">
+                <img src="" class="cam__img event__image"/>
+            </div>
+            <div class="cam__controls">
+                <div class="cam__control cam__scale">
+                    Приближение:
+                    <span class="cam__control-value"></span>
+                </div>
+                <div class="cam__control cam__bright">
+                    Яркость:
+                    <span class="cam__control-value"></span>
+                </div>
+            </div>
+        </div>
+    </template>
+
     <template id="climate">
         <div class="event__climate">
             <div class="climate__temperature">
@@ -83,4 +101,5 @@
     </template>
 </body>
 <script src="index.js"></script>
+<script src="https://code.jquery.com/pep/0.4.3/pep.js"></script>
 </html>

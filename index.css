@@ -250,6 +250,22 @@ body {
     background: #F3F3F3;
 }
 
+.cam__image-wrapper {
+    overflow: hidden;
+    background: #000;
+    border-radius: 20px;
+}
+
+.cam__controls {
+    display: none;
+    font-size: 12px;
+    margin-top: 15px;
+}
+
+.cam__bright {
+    text-align: right;
+}
+
 .event__image {
     width: 100%;
 }
@@ -369,5 +385,10 @@ body {
     .event__description,
     .event_l .event__description {
         font-size: 18px;
+    }
+
+    .cam__controls {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
     }
 }
