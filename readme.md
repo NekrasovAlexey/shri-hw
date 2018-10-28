@@ -3,3 +3,8 @@
 ```sh
 npm start
 ```
+
+***Запуск сборки клиентской части***
+```sh
+npm run build:client
+```

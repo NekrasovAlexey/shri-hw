@@ -1,3 +1,6 @@
+require('./index.css');
+require('./assets');
+
 const events = {
     "events": [
         {
@@ -161,14 +164,14 @@ const events = {
     .events;
 
 const eventsContainer = document.querySelector('.events');
-const template = document.querySelector('#event');
-const graphTemplate = document.querySelector('#graph');
-const buttonTemplate = document.querySelector('#button-template');
-const climateTemplate = document.querySelector('#climate');
-const camTemplate = document.querySelector('#cam');
+const template = document.querySelector<HTMLTemplateElement>('#event');
+const graphTemplate = document.querySelector<HTMLTemplateElement>('#graph');
+const buttonTemplate = document.querySelector<HTMLTemplateElement>('#button-template');
+const climateTemplate = document.querySelector<HTMLTemplateElement>('#climate');
+const camTemplate = document.querySelector<HTMLTemplateElement>('#cam');
 
 const addGraph = (data, parent) => {
-    const graph = graphTemplate.content.cloneNode(true);
+    const graph = <HTMLElement>graphTemplate.content.cloneNode(true);
 
     graph.querySelector('.graph__img').setAttribute('src', 'assets/graph.png');
     parent.parentElement.parentElement.classList.add('event_l-row');
@@ -178,7 +181,7 @@ const addGraph = (data, parent) => {
 
 const addButtons = (labels, parent) => {
     labels.map((label, index) => {
-        const button = buttonTemplate.content.cloneNode(true);
+        const button = <HTMLElement>buttonTemplate.content.cloneNode(true);
         const buttonElement = button.querySelector('.button');
         !index && buttonElement.classList.add('button_apply');
         buttonElement.textContent = label;
@@ -188,7 +191,7 @@ const addButtons = (labels, parent) => {
 };
 
 const addClimate = (data, parent) => {
-    const climate = climateTemplate.content.cloneNode(true);
+    const climate = <HTMLElement>climateTemplate.content.cloneNode(true);
 
     climate
         .querySelector('.climate__temperature')
@@ -203,7 +206,7 @@ const addClimate = (data, parent) => {
 };
 
 const addCam = (data, parent) => {
-    const cam = camTemplate.content.cloneNode(true);
+    const cam = <HTMLElement>camTemplate.content.cloneNode(true);
 
     const image = cam.querySelector('.cam__img');
     image.setAttribute('src', `assets/${data.image}`);
@@ -261,7 +264,7 @@ events.forEach(event => {
         icon
     } = event;
 
-    const eventTemplate = template.content.cloneNode(true);
+    const eventTemplate = <HTMLElement>template.content.cloneNode(true);
     eventTemplate.querySelector('.event').classList.add(`event_${size}`);
     eventTemplate.querySelector('.event').classList.add(`event_${type}`);
     eventTemplate.querySelector('.event__icon').classList.add(`icon_${icon}`);
@@ -281,13 +284,16 @@ events.forEach(event => {
 });
 
 class CamControl {
+    touch = {};
+    params = {
+        translateX: 0,
+        scale: 1,
+        rotate: 0
+    };
+    element = null;
+    img = null;
+
     constructor (query) {
-        this.touch = {};
-        this.params = {
-            translateX: 0,
-            scale: 1,
-            rotate: 0
-        };
         this.element = document.querySelector(query);
         this.img = this.element.querySelector('.cam__img');
 
@@ -302,8 +308,8 @@ class CamControl {
     bindEvents () {
         this.img.addEventListener('pointerdown', e => this.onPointerDown(e));
         this.img.addEventListener('pointermove', e => this.onPointerMove(e));
-        this.img.addEventListener('pointerup', e => this.onPointerUp(e));
-        this.img.addEventListener('pointercancel', e => this.onPointerUp(e));
+        this.img.addEventListener('pointerup', e => this.onPointerUp());
+        this.img.addEventListener('pointercancel', e => this.onPointerUp());
     }
 
     onPointerDown (e) {
