@@ -6,7 +6,7 @@
  */
 exports.status = (req, res) => {
     const {startDate} = req.data;
-    const diffInSeconds = Math.floor((new Date() - startDate) / 1000);
+    const diffInSeconds = Math.floor((new Date().getTime() - startDate) / 1000);
     const diffInMinutes = Math.floor(diffInSeconds / 60);
 
     // Время в формате 'HH:mm:ss'

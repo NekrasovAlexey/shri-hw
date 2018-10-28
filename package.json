@@ -3,10 +3,14 @@
   "version": "1.0.1",
   "private": true,
   "scripts": {
-    "start": "node server/app.js"
+    "start": "tsc && node build/server/app.js",
+    "fastStart": "node build/server/app.js",
+    "build:server": "tsc"
   },
   "dependencies": {
+    "@types/node": "10.12.0",
     "body-parser": "1.18.3",
-    "express": "4.16.4"
+    "express": "4.16.4",
+    "typescript": "3.1.3"
   }
 }

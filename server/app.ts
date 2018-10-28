@@ -5,7 +5,9 @@ const errorCatcher = require('./middleware/errorCatcher');
 const setCustomData = require('./middleware/setCustomData');
 const setRoutes = require('./Routes').setRoutes;
 
-const data = {};
+const data = {
+    startDate: null
+};
 
 const app = express();
 

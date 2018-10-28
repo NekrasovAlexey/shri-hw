@@ -1,4 +1,4 @@
-const eventsJson = require('../../events.json');
+const eventsJson = require('../../../events.json');
 
 /**
  * Допустимые типы событий.
