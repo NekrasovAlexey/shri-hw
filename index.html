@@ -34,13 +34,48 @@
         </div>
     </header>
     <main class="main">
-        <header class="main__title">
-            Лента событий
-        </header>
-        <div class="events">
+        <div id="events-tab" class="tab_hidden">
+            <header class="main__title">
+                Лента событий
+            </header>
+            <div class="events">
 
+            </div>
+        </div>
+        <div id="video-tab">
+            <div class="full-video-controls">
+                <button class="full-exit">Выйти</button>
+                <canvas class="volume" width="30" height="100"></canvas>
+            </div>
+            <header class="main__title">
+                Видеонаблюдение
+            </header>
+            <div class="videos">
+
+            </div>
         </div>
     </main>
+
+    <template id="video-template">
+        <div class="video">
+            <video
+                class="video__video"
+                muted
+                autoplay
+            >
+            </video>
+            <div class="video_controls">
+                <label>
+                    Яркость:
+                    <input type="range" min="0" max="100" class="brightness">
+                </label>
+                <label>
+                    Контраст:
+                    <input type="range" min="0" max="100" class="contrast">
+                </label>
+            </div>
+        </div>
+    </template>
 
     <template id="event">
         <div class="event">
@@ -100,6 +135,7 @@
         <button class="button"></button>
     </template>
 </body>
-<script src="index.js"></script>
 <script src="https://code.jquery.com/pep/0.4.3/pep.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<script src="index.js"></script>
 </html>

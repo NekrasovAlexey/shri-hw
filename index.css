@@ -1,6 +1,8 @@
 body {
     font-family: ArialMT;
     color: #333;
+    margin: 0;
+    transition-duration: 2s;
 }
 
 .icon {
@@ -391,4 +393,57 @@ body {
         display: grid;
         grid-template-columns: 1fr 1fr;
     }
+}
+
+.tab_hidden {
+    display: none;
+}
+
+.videos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 10px;
+}
+
+.video {
+    width: 100%;
+}
+
+.video__video {
+    width: 100%;
+    transition-duration: .3s;
+    background: #000;
+}
+
+.video_hidden {
+    display: none;
+}
+
+.video_full {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.videos_full {
+    grid-template-columns: 1fr;
+}
+
+.main_full {
+    padding: 0;
+}
+
+.full-video-controls {
+    position: fixed;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition-duration: .2s;
+    z-index: 1;
+}
+
+.full-video-controls_displayed {
+    opacity: 1;
+    pointer-events: initial;
 }

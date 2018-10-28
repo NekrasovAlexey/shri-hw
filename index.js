@@ -420,3 +420,177 @@ const menuToggle = () => {
 
 document.querySelector('.header__mobile-menu').addEventListener('click', menuToggle);
 document.querySelector('.paranja').addEventListener('click', menuToggle);
+
+const filterList = [
+    'brightness',
+    'contrast'
+];
+
+const filterValues = {
+    brightness: {
+        min: 0,
+        max: 5,
+        defaultValue: 1
+    },
+    contrast: {
+        min: 0,
+        max: 5,
+        defaultValue: 1
+    }
+};
+
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+const drawVolume = (analyser, canvas) => {
+    analyser.fftSize = 256;
+    const bufferLength = analyser.frequencyBinCount;
+    const dataArray = new Uint8Array(bufferLength);
+    const canvasCtx = canvas.getContext('2d');
+
+    canvasCtx.clearRect(0, 0, 30, 100);
+
+    const draw = () => {
+        requestAnimationFrame(draw);
+
+        analyser.getByteFrequencyData(dataArray);
+
+        canvasCtx.fillStyle = 'rgb(0, 0, 0)';
+        canvasCtx.fillRect(0, 0, 30, 100);
+
+        const barWidth = (30 / bufferLength) * 2.5;
+        let barHeight;
+        let x = 0;
+
+        for(let i = 0; i < bufferLength; i++) {
+            barHeight = dataArray[i];
+
+            canvasCtx.fillStyle = 'rgb(' + (barHeight+100) + ',50,50)';
+            canvasCtx.fillRect(x,100-barHeight/2,barWidth,barHeight/2);
+
+            x += barWidth + 1;
+        }
+    };
+
+    draw();
+
+};
+
+const fullControls = document.querySelector('.full-video-controls');
+const exitButton = document.querySelector('.full-exit');
+const handleClose = () => {
+    fullControls.classList.remove('full-video-controls_displayed');
+
+    const video = document.querySelector('.video_full');
+    video.classList.remove('video_full');
+    video.muted = true;
+};
+exitButton.addEventListener('click', handleClose);
+
+class VideoControls {
+    constructor (videoWrapper) {
+        this.wrapper = videoWrapper;
+        this.filter = filterList.reduce((currentValues, filter) => ({
+            ...currentValues,
+            [filter]: filterValues[filter].defaultValue
+        }), {});
+
+        this.init();
+    }
+
+    init () {
+        // Добавляем обработчик на клик по видео.
+        this.wrapper.querySelector('.video__video').addEventListener('click', this.handleOpen.bind(this));
+
+        // Добавляем обработчики на фильтры.
+        const controls = this.wrapper.querySelector('.video_controls');
+
+        filterList.forEach(filter => {
+            const control = controls.querySelector(`.${filter}`);
+
+            const {min, max} = filterValues[filter];
+            control.value = (this.filter[filter] - min) * 100 / (max - min);
+            control.addEventListener('change', this.handleFilterChangeFactory(filter));
+        });
+    }
+
+    handleOpen (e) {
+        fullControls.classList.add('full-video-controls_displayed');
+
+        const video = e.currentTarget;
+        video.classList.add('video_full');
+        video.animate({
+            transform: ['scale(0.5)', 'scale(1)']
+        }, {
+            duration: 100
+        });
+        video.muted = false;
+
+        const analyser = audioCtx.createAnalyser();
+        audioCtx
+            .createMediaElementSource(video)
+            .connect(analyser);
+        analyser.connect(audioCtx.destination);
+
+        drawVolume(analyser, document.querySelector('.volume'));
+    }
+
+    handleFilterChangeFactory (filter) {
+        return e => {
+            const value = e.currentTarget.value;
+            const {min, max} = filterValues[filter];
+
+            this.filter[filter] = min + ((max - min) / 100 * value);
+
+            this.updateFilter();
+        }
+    }
+
+    updateFilter () {
+        const filter = filterList
+            .map(filter => `${filter}(${this.filter[filter]})`)
+            .join(' ');
+
+        this.wrapper.querySelector('.video__video').style.filter = filter;
+    }
+}
+
+const initVideo = (id, url) => {
+    const videoWrapper = document.querySelector(`#${id}`);
+
+    new VideoControls(videoWrapper);
+
+    const video = videoWrapper.querySelector('.video__video');
+    if (Hls.isSupported()) {
+        const hls = new Hls();
+        hls.loadSource(url);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, function () {
+            video.play();
+        });
+    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = url;
+        video.addEventListener('loadedmetadata', function () {
+            video.play();
+        });
+    }
+};
+
+const videos = [
+    'http://localhost:9191/master?url=http%3A%2F%2Flocalhost%3A3102%2Fstreams%2Fsosed%2Fmaster.m3u8',
+    'http://localhost:9191/master?url=http%3A%2F%2Flocalhost%3A3102%2Fstreams%2Fcat%2Fmaster.m3u8',
+    'http://localhost:9191/master?url=http%3A%2F%2Flocalhost%3A3102%2Fstreams%2Fdog%2Fmaster.m3u8',
+    'http://localhost:9191/master?url=http%3A%2F%2Flocalhost%3A3102%2Fstreams%2Fhall%2Fmaster.m3u8'
+];
+
+const videosWrapper = document.querySelector('.videos');
+const videoTemplate = document.querySelector('#video-template');
+
+videos.forEach((link, index) => {
+    const video = videoTemplate.content.cloneNode(true);
+
+    const id = `video-${index}`;
+    video.querySelector('.video').setAttribute('id', id);
+
+    videosWrapper.appendChild(video);
+
+    initVideo(id, link);
+});
