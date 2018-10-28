@@ -4,8 +4,9 @@ const config = require('./config');
 const errorCatcher = require('./middleware/errorCatcher');
 const setCustomData = require('./middleware/setCustomData');
 const setRoutes = require('./Routes').setRoutes;
+import {ICustomData} from './Models';
 
-const data = {
+const data: ICustomData = {
     startDate: null
 };
 
@@ -31,7 +32,7 @@ setRoutes(app);
  */
 app.use(errorCatcher);
 
-const port = process.argv[2] ? Number(process.argv[2]) : config.port;
+const port: number = process.argv[2] ? Number(process.argv[2]) : config.port;
 
 app.listen(port, error => {
     if (error) {
