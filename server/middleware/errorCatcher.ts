@@ -1,14 +1,14 @@
-const config = require('../config');
+import express = require('express');
 
 /**
  * Метод обработки ошибок в приложении.
  */
-module.exports = errorCatcher = (err, _, res, next) => {
+module.exports = (err: Error, _, res: express.Response, next: express.NextFunction) => {
     const {message, stack} = err;
 
     console.error(message, stack);
 
-    if (config.env === 'development' || process.argv[3] === 'development') {
+    if (process.argv[3] === 'development') {
         res.status(500).json({
             message,
             stack
