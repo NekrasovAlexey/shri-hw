@@ -19,10 +19,15 @@ const menuItems = [
     }
 ];
 
+const localStore = localStorage.getItem('store');
+const initialStore = localStore ?
+    JSON.parse(localStore) :
+    {
+        activeMenuItem: EMenuItem.EVENTS
+    };
+
 // Инициализируем стор.
-Lib.initStore({
-    activeMenuItem: EMenuItem.EVENTS
-});
+Lib.initStore(initialStore);
 
 /**
  * Название события изменения текущего раздела.
@@ -42,6 +47,8 @@ const handleChangeActiveMenuItemFactory = name => e => {
         action: CHANGE_ACTIVE_MENU_ITEM_ACTION,
         payload: name
     });
+
+    localStorage.setItem('store', JSON.stringify(Lib.getStore()));
 };
 
 // Функция рендера меню.
