@@ -68,7 +68,6 @@ body {
 
 .header__logo {
     display: inline-block;
-    width: 108px;
     margin-right: 10px;
 }
 
@@ -107,7 +106,7 @@ body {
     opacity: .6;
 }
 
-.menu__link_active {
+.menu__item_active .menu__link {
     opacity: 1;
 }
 
