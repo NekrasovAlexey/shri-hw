@@ -1,3 +1,4 @@
+import {createApp} from "./src/app";
 import {CamControl} from "./src/CamContol";
 import {addButtons} from "./src/templates/buttons";
 import {addCam} from "./src/templates/cam";
@@ -248,3 +249,6 @@ const menuToggle = () => {
 
 document.querySelector('.header__mobile-menu').addEventListener('click', menuToggle);
 document.querySelector('.paranja').addEventListener('click', menuToggle);
+
+// Подключаем библиотеку.
+createApp();
